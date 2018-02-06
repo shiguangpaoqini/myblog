@@ -1,0 +1,23 @@
+<%- include('header') %>
+
+<div class="ui grid">
+  <div class="four wide column"></div>
+  <div class="eight wide column">
+    <div class="ui card centered">
+      <div class="blurring dimmable image">
+        <img src="/images/<%= user.avatar %>">
+      </div>
+      <div class="content">
+        <div class="header"><%= user.name %></div>
+        <div class="meta">
+          <span class="group"><%= ({m: '男', f: '女', x: '保密'})[user.gender] %></span>
+          <pre class="group"><%= user.bio %></pre>
+        </div>
+        <a href="/userinfo/edit"><button class="positive ui button right floated">修改资料</button></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('footer') %>

@@ -5,7 +5,7 @@
       <div class="menu">
         <% if(user){ %>
           <a href="/posts?author=<%= user._id %>" class="item">个人主页</a>
-          <a href="/posts/<%= user._id %>/info" class="item">个人中心</a>
+          <a href="/userinfo" class="item">个人资料</a>
           <div class="divider"></div>
           <a href="/posts/create" class="item">发表文章</a>
           <a href="/signout" class="item">登出</a>
