@@ -1,0 +1,35 @@
+<%- include('header') %>
+<% posts.forEach(function (post) { %>
+<%- include('components/post-content',{ post: post }) %>
+<% }) %>
+<div class="ui grid">
+  <div class="eight wide column centered row">
+
+    <div class="ui pagination menu">
+      <!-- 通过author控制个人文章分页或所有文章分页 -->
+      <% var page = Number(page) %>
+      <% var href = author?'/posts?author='+author+'&page=':'/posts?page=' %>
+
+      <% if(page != 1){ %>
+        <a class="item" href="<%= href %><%= page-1 %>">
+          <
+        </a>
+      <% } %>
+
+      <% var start = 1; if(page-2>1){start=page-2} %>
+      <% var end = pageCount; if(page+2<pageCount){end=page+2} %>
+      <% for(var j=start; j<=end; j++){ %>
+        <a class="item <% if(page == j){ %> active <% } %>" href="<%= href %><%= j %>">
+          <%= j %>
+        </a>
+      <% } %>
+
+      <% if(page < pageCount){ %>
+        <a class="item" href="<%= href %><%= page+1 %>">
+          >
+        </a>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('footer') %>
