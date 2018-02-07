@@ -6,7 +6,8 @@ const CommentModel = require('../models/comments');
 
 router.get('/',function (req, res, next) {
   const author = req.query.author;
-  PostModel.getPostsCount(author).then(function (count) {
+  const key = req.query.key;
+  PostModel.getPostsCount(author, key).then(function (count) {
     count = count%5?Math.floor(count/5)+1:count/5;
     return pageCount = count;
   });
@@ -14,12 +15,13 @@ router.get('/',function (req, res, next) {
   if(!page){
     page=1;
   }
-  PostModel.getPosts(author,page)
+  PostModel.getPosts(author,page,key)
     .then(function (posts) {
       res.render('posts',{
         posts: posts,
         page: page,
         author: author,
+        key: key,
         pageCount: pageCount
       });
     })
@@ -64,7 +66,6 @@ router.post('/create',checkLogin,function(req, res, next){
 router.get('/create',checkLogin,function(req, res, next){
   res.render('create');
 });
-
 
 router.get('/:postId',function(req, res, next){
   const postId = req.params.postId;

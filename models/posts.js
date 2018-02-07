@@ -55,19 +55,25 @@ module.exports = {
       .exec()
   },
   // 获取所有用户文章数量或者特定用户的所有文章数量
-  getPostsCount:function getPostsCount (author) {
+  getPostsCount:function getPostsCount (author, key) {
     const query = {};
     if(author){
       query.author = author;
+    }
+    if(key){
+      query.title = {$regex:new RegExp(key)};
     }
     return Post.count(query).exec()
   },
 
   // 按创建时间降序获取指定页用户文章或者特定用户的指定页文章
-  getPosts: function getPosts (author, page) {
+  getPosts: function getPosts (author, page, key) {
     const query = {};
     if(author){
       query.author = author;
+    }
+    if(key){
+      query.title = {$regex:new RegExp(key)};
     }
     if(page) {
       var start = (page - 1) * 5;

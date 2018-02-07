@@ -1,4 +1,5 @@
 <%- include('header') %>
+<%- include('components/menu') %>
 <% posts.forEach(function (post) { %>
 <%- include('components/post-content',{ post: post }) %>
 <% }) %>
@@ -8,7 +9,7 @@
     <div class="ui pagination menu">
       <!-- 通过author控制个人文章分页或所有文章分页 -->
       <% var page = Number(page) %>
-      <% var href = author?'/posts?author='+author+'&page=':'/posts?page=' %>
+      <% var href = author && key?'/posts?author='+author+'&key='+key+'&page=':'/posts?page=' %>
 
       <% if(page != 1){ %>
         <a class="item" href="<%= href %><%= page-1 %>">

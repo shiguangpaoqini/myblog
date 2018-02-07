@@ -55,4 +55,38 @@ router.post('/edit',checkLogin,function(req,res,next){
     })
 });
 
+router.get('/changepassword',checkLogin,function (req, res, next) {
+  const user = req.session.user;
+  res.render('changepassword',{
+    user: user
+  });
+});
+
+router.post('/changepassword',checkLogin,function (req, res, next) {
+  const user = req.session.user;
+  const name = user.name;
+  const oldpassword = req.fields.oldpassword;
+  const newpassword = req.fields.newpassword;
+  const repassword = req.fields.repassword;
+
+  UserModel.getUserByName(name)
+    .then(function (user) {
+      if (sha1(oldpassword) !== user.password) {
+        req.flash('error', '用户名或密码错误');
+        return res.redirect('back');
+      }
+      if (newpassword !== repassword) {
+        req.flash('error','两次输入密码不一致');
+        return res.redirect('back');
+      }
+      UserModel.updataPassWordByName(name,sha1(newpassword))
+        .then(function () {
+          req.session.user = null;
+          req.flash('success','修改成功');
+          return res.redirect('/signin');
+        })
+    })
+    .catch(next)
+});
+
 module.exports = router;

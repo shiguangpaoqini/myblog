@@ -96,3 +96,8 @@ a:hover {
 .ui.pagination.menu .active.item{
   background-color: #cccccc;
 }
+
+/* ------------ Editor ---------------- */
+#editor input{
+  padding: 0;
+}

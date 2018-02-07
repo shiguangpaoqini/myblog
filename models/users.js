@@ -19,5 +19,12 @@ module.exports = {
     return User
       .findOneAndUpdate({ _id: id },{$set:{bio:bio,gender:gender}})
       .exec()
+  },
+
+  // 通过 name 更新用户密码
+  updataPassWordByName: function updataPassWordByName (name,newpassword) {
+    return User
+      .findOneAndUpdate({ name: name },{$set:{password:newpassword}})
+      .exec()
   }
 };

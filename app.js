@@ -6,6 +6,7 @@ const flash = require('connect-flash');
 const config = require('config-lite')(__dirname);
 const routes = require('./routes');
 const pkg = require('./package');
+const formidable = require('express-formidable');
 
 const app = express();
 
@@ -33,7 +34,7 @@ app.use(session({
 // flash中间件
 app.use(flash());
 
-app.use(require('express-formidable')({
+app.use(formidable({
   uploadDir: path.join(__dirname, 'public/images'),
   keepExtensions: true
 }));

@@ -1,0 +1,45 @@
+<div class="ui grid">
+  <div class="four wide column"></div>
+  <div class="eight wide column">
+    <div class="ui small menu">
+      <div class="ui dropdown item">按时间排序 <i class="dropdown icon"></i> <div class="menu">
+          <a class="item">按时间排序</a>
+          <a class="item">按留言量排序</a>
+          <a class="item">按浏览量排序</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">分类 <i class="dropdown icon"></i> <div class="menu">
+          <a class="item">英语</a>
+          <a class="item">Russian</a>
+          <a class="item">Spanish</a>
+        </div>
+      </div>
+      <div class="right menu">
+        <div class="ui action input">
+          <input placeholder="Search..." type="text" id="key">
+          <button class="ui icon button" id="serach">
+            <i class="search icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $().ready(function() {
+    $('#serach').click(function () {
+      var key = $('#key').val();
+      if("<%= key %>" === "<%= author %>" === "<%= page %>" === ""){
+        window.location.search = ""
+      }else {
+        window.location.search = "?author=<%= author %>&key="+key+"&page=<%= page %>"
+      }
+    })
+
+    $('#key').keydown(function (ev) {
+      if(ev.keyCode == 13){
+        $('#serach').click();
+      }
+    })
+  })
+</script>
