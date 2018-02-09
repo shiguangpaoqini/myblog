@@ -54,11 +54,14 @@ module.exports = {
       .contentToHtml()
       .exec()
   },
-  // 获取所有用户文章数量或者特定用户的所有文章数量
-  getPostsCount:function getPostsCount (author, key) {
+  // (指定字段的)获取所有用户文章数量或者特定用户的所有文章数量
+  getPostsCount:function getPostsCount (author, type, key) {
     const query = {};
     if(author){
       query.author = author;
+    }
+    if(type){
+      query.type = type;
     }
     if(key){
       query.title = {$regex:new RegExp(key)};
@@ -66,11 +69,14 @@ module.exports = {
     return Post.count(query).exec()
   },
 
-  // 按创建时间降序获取指定页用户文章或者特定用户的指定页文章
-  getPosts: function getPosts (author, page, key) {
+  // (指定字段的)按创建时间降序获取指定页用户文章或者特定用户的指定页文章
+  getPosts: function getPosts (author, page, type, key) {
     const query = {};
     if(author){
       query.author = author;
+    }
+    if(type){
+      query.type = type;
     }
     if(key){
       query.title = {$regex:new RegExp(key)};
@@ -81,7 +87,7 @@ module.exports = {
     return Post
       .find(query)
       .populate({ path: 'author',model: 'User' })
-      .sort({ id: -1 })
+      .sort({ _id: -1 })
       .skip(start)
       .limit(5)
       .addCreatedAt()

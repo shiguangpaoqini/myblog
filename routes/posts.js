@@ -3,11 +3,13 @@ const router = express.Router();
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
 const CommentModel = require('../models/comments');
+const path = require('path');
 
 router.get('/',function (req, res, next) {
   const author = req.query.author;
   const key = req.query.key;
-  PostModel.getPostsCount(author, key).then(function (count) {
+  const type = req.query.type;
+  PostModel.getPostsCount(author, type, key).then(function (count) {
     count = count%5?Math.floor(count/5)+1:count/5;
     return pageCount = count;
   });
@@ -15,12 +17,13 @@ router.get('/',function (req, res, next) {
   if(!page){
     page=1;
   }
-  PostModel.getPosts(author,page,key)
+  PostModel.getPosts(author,page,type,key)
     .then(function (posts) {
       res.render('posts',{
         posts: posts,
         page: page,
         author: author,
+        type:type,
         key: key,
         pageCount: pageCount
       });
@@ -31,12 +34,15 @@ router.get('/',function (req, res, next) {
 router.post('/create',checkLogin,function(req, res, next){
   const author = req.session.user._id;
   const title = req.fields.title;
+  const type = req.fields.type;
   const content = req.fields.content;
-
   // 校验参数
   try{
     if(!title.length) {
       throw new Error('请填写标题');
+    }
+    if(!type.length) {
+      throw new Error('请选择类型');
     }
     if(!content.length) {
       throw new Error('请填写内容');
@@ -49,6 +55,7 @@ router.post('/create',checkLogin,function(req, res, next){
   var post = {
     author: author,
     title: title,
+    type:type,
     content: content
   };
 
@@ -113,14 +120,18 @@ router.post('/:postId/edit',function(req, res, next){
   const postId = req.params.postId;
   const author = req.session.user._id;
   const title = req.fields.title;
+  const type = req.fields.type;
   const content = req.fields.content;
 
   // 校验参数
   try {
-    if (!title) {
+    if (!title.length) {
       throw new Error('请填写标题')
     }
-    if (!content) {
+    if (!type.length) {
+      throw new Error('请选择类型')
+    }
+    if (!content.length) {
       throw new Error('请填写内容')
     }
   } catch (e){
@@ -136,7 +147,7 @@ router.post('/:postId/edit',function(req, res, next){
       if(author.toString() !== post.author._id.toString()){
         throw new Error('没有权限')
       }
-      PostModel.updatePostById(postId,{ title: title, content: content })
+      PostModel.updatePostById(postId,{ title: title, type: type, content: content })
         .then(function () {
           req.flash('success','编辑文章成功');
           res.redirect('/posts/'+postId);
@@ -167,4 +178,19 @@ router.get('/:postId/remove',function(req, res, next){
     })
 });
 
+router.post('/uploadImg',function (req, res, next) {
+    fliename = req.files.img.path.split(path.sep).pop();
+    res.json(
+      {
+        // errno 即错误代码，0 表示没有错误。
+        //       如果有错误，errno != 0，可通过下文中的监听函数 fail 拿到该错误码进行自定义处理
+        errno: 0,
+
+        // data 是一个数组，返回若干图片的线上地址
+        data: [
+          '/images/'+fliename
+        ]
+      }
+    )
+});
 module.exports = router;

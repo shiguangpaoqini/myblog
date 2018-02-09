@@ -10,7 +10,7 @@
     <div class="eight wide column">
       <div class="ui segment">
         <h3><a href="/posts/<%= post._id %>"><%= post.title %></a></h3>
-        <a class="ui teal right ribbon label"></a>
+        <a class="ui <%= ({'随笔': 'teal', '学习': 'violet', '生活': 'green'})[post.type] %> right ribbon label"><%= post.type %></a>
         <pre><%- post.content %></pre>
         <div>
           <span class="tag"><%= post.created_at %></span>

@@ -2,16 +2,19 @@
   <div class="four wide column"></div>
   <div class="eight wide column">
     <div class="ui small menu">
-      <div class="ui dropdown item">按时间排序 <i class="dropdown icon"></i> <div class="menu">
+      <!-- 懒得做了，要再加个字段-->
+      <div class="ui dropdown item disabled" id="sort">
+        <span>按时间排序</span> <i class="dropdown icon"></i>
+        <div class="menu" id="sortMenu">
           <a class="item">按时间排序</a>
-          <a class="item">按留言量排序</a>
           <a class="item">按浏览量排序</a>
         </div>
       </div>
-      <div class="ui dropdown item">分类 <i class="dropdown icon"></i> <div class="menu">
-          <a class="item">英语</a>
-          <a class="item">Russian</a>
-          <a class="item">Spanish</a>
+      <div class="ui dropdown item">分类 <i class="dropdown icon"></i>
+        <div class="menu" id="typeMenu">
+          <a class="item">随笔</a>
+          <a class="item">学习</a>
+          <a class="item">生活</a>
         </div>
       </div>
       <div class="right menu">
@@ -29,10 +32,10 @@
   $().ready(function() {
     $('#serach').click(function () {
       var key = $('#key').val();
-      if("<%= key %>" === "<%= author %>" === "<%= page %>" === ""){
+      if("<%= key %>" === "<%= author %>" === "<%= page %>" === "<%= type %>" === ""){
         window.location.search = ""
       }else {
-        window.location.search = "?author=<%= author %>&key="+key+"&page=<%= page %>"
+        window.location.search = "?author=<%= author %>&type=<%= type %>&key="+key+"&page=1"
       }
     })
 
@@ -40,6 +43,24 @@
       if(ev.keyCode == 13){
         $('#serach').click();
       }
+    })
+
+    $('#typeMenu .item').click(function () {
+      var type = $(this).html()
+      if("<%= key %>" === "<%= author %>" === "<%= page %>" === "<%= type %>" === ""){
+        window.location.search = ""
+      }else {
+        window.location.search = "?author=<%= author %>&type="+type+"&key=<%= key %>&page=1"
+      }
+    })
+
+    $('#sortMenu .item').click(function () {
+      $('#sort span').html($(this).html())
+      var sort = '_id'
+      if(this.html()==='按浏览量排序'){
+        sort = 'pv'
+      }
+
     })
   })
 </script>

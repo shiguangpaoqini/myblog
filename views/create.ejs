@@ -14,33 +14,52 @@
       <div class="field required">
         <label>标题</label>
         <input type="text" name="title">
+
+        <label>文章类型</label>
+        <div class="ui selection dropdown" tabindex="0">
+          <input name="type" type="hidden">
+          <div class="default text">类型</div>
+          <i class="dropdown icon"></i>
+          <div class="menu" tabindex="-1">
+            <div class="item" data-value="随笔"><i class=" star icon"></i> 随笔 </div>
+            <div class="item" data-value="学习"><i class=" star icon"></i> 学习 </div>
+            <div class="item" data-value="生活"><i class=" star icon"></i> 生活 </div>
+          </div>
+        </div>
+
       </div>
       <div class="field required">
         <label>内容</label>
-        <textarea name="content" rows="15"></textarea>
-        <!--<div id="editor"></div>-->
+        <textarea id="text" name="content" hidden></textarea>
+        <div id="editor"></div>
       </div>
       <input type="submit" class="ui button" value="发布">
     </form>
   </div>
 </div>
 
+<script type="text/javascript">
+  var E = window.wangEditor
+  var editor = new E('#editor')
+  var $text = $('#text')
+  editor.customConfig.zIndex = 0
+  editor.customConfig.onchange = function (html) {
+    // 监控变化，同步更新到 textarea
+    $text.val(html)
+  }
+  editor.customConfig.menus = [
+    'head',
+    'bold',
+    'italic',
+    'underline',
+    'link',
+    'image',
+    'undo',
+    'redo'
+  ]
+  editor.customConfig.uploadImgServer = '/posts/uploadImg'
+  editor.customConfig.uploadFileName = 'img'
 
-<!--<script type="text/javascript" src="/javascripts/wangEditor.min.js"></script>-->
-<!--<script type="text/javascript">-->
-  <!--var E = window.wangEditor-->
-  <!--var editor = new E('#editor')-->
-  <!--editor.customConfig.menus = [-->
-    <!--'head',-->
-    <!--'bold',-->
-    <!--'italic',-->
-    <!--'underline',-->
-    <!--'link',-->
-    <!--'image',-->
-    <!--'undo',-->
-    <!--'redo'-->
-  <!--]-->
-  <!--editor.customConfig.uploadImgServer = '/upload'-->
-  <!--editor.create()-->
-<!--</script>-->
+  editor.create()
+</script>
 <%- include('footer') %>
