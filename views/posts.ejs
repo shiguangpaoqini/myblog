@@ -9,10 +9,9 @@
     <div class="ui pagination menu">
       <!-- 通过author控制个人文章分页或所有文章分页 -->
       <% var page = Number(page) %>
-      <% var href = author && key?'/posts?author='+author+'&key='+key+'&page=':'/posts?page=' %>
 
       <% if(page != 1){ %>
-        <a class="item" href="<%= href %><%= page-1 %>">
+        <a id="pageMinus" class="item" href="#">
           <
         </a>
       <% } %>
@@ -20,17 +19,31 @@
       <% var start = 1; if(page-2>1){start=page-2} %>
       <% var end = pageCount; if(page+2<pageCount){end=page+2} %>
       <% for(var j=start; j<=end; j++){ %>
-        <a class="item <% if(page == j){ %> active <% } %>" href="<%= href %><%= j %>">
+        <a class="item <% if(page == j){ %> active <% } %> pageNum" href="#">
           <%= j %>
         </a>
       <% } %>
 
       <% if(page < pageCount){ %>
-        <a class="item" href="<%= href %><%= page+1 %>">
+        <a  id="pageAdd" class="item" href="#">
           >
         </a>
       <% } %>
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  $().ready(function() {
+    var url = $.jurlp(window.location.href);
+    url.query({"page": '<%= page-1 %>' });
+    $('#pageMinus').attr('href',url.url());
+    url.query({"page": '<%= page+1 %>' });
+    $('#pageAdd').attr('href',url.url());
+    for(var i=0; i<$('.pageNum').length; i++){
+      var pageNum = Number($('.pageNum').eq(i).html());
+      url.query({"page": pageNum});
+      $('.pageNum').eq(i).attr('href',url.url());
+    }
+  })
+</script>
 <%- include('footer') %>

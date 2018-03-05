@@ -17,14 +17,16 @@ router.get('/',function (req, res, next) {
   if(!page){
     page=1;
   }
-  PostModel.getPosts(author,page,type,key)
+  var sort = req.query.sort;
+  if(!sort){
+    sort='_id'
+  }
+  PostModel.getPosts(author,page,type,key,sort)
     .then(function (posts) {
       res.render('posts',{
         posts: posts,
         page: page,
-        author: author,
-        type:type,
-        key: key,
+        sort: sort,
         pageCount: pageCount
       });
     })

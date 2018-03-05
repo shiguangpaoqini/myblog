@@ -2,9 +2,8 @@
   <div class="four wide column"></div>
   <div class="eight wide column">
     <div class="ui small menu">
-      <!-- 懒得做了，要再加个字段-->
-      <div class="ui dropdown item disabled" id="sort">
-        <span>按时间排序</span> <i class="dropdown icon"></i>
+      <div class="ui dropdown item" id="sort">
+        <span>按<%= ({_id: '时间', pv: '浏览量'})[sort] %>排序</span> <i class="dropdown icon"></i>
         <div class="menu" id="sortMenu">
           <a class="item">按时间排序</a>
           <a class="item">按浏览量排序</a>
@@ -32,11 +31,9 @@
   $().ready(function() {
     $('#serach').click(function () {
       var key = $('#key').val();
-      if("<%= key %>" === "<%= author %>" === "<%= page %>" === "<%= type %>" === ""){
-        window.location.search = ""
-      }else {
-        window.location.search = "?author=<%= author %>&type=<%= type %>&key="+key+"&page=1"
-      }
+      var url = $.jurlp(window.location.href);
+      url.query({"key":key});
+      window.location.href = url.url();
     })
 
     $('#key').keydown(function (ev) {
@@ -47,20 +44,20 @@
 
     $('#typeMenu .item').click(function () {
       var type = $(this).html()
-      if("<%= key %>" === "<%= author %>" === "<%= page %>" === "<%= type %>" === ""){
-        window.location.search = ""
-      }else {
-        window.location.search = "?author=<%= author %>&type="+type+"&key=<%= key %>&page=1"
-      }
+      var url = $.jurlp(window.location.href);
+      url.query({"type":type});
+      window.location.href = url.url();
     })
 
     $('#sortMenu .item').click(function () {
       $('#sort span').html($(this).html())
       var sort = '_id'
-      if(this.html()==='按浏览量排序'){
+      if($(this).html()==='按浏览量排序'){
         sort = 'pv'
       }
-
+      var url = $.jurlp(window.location.href);
+      url.query({"sort":sort});
+      window.location.href = url.url();
     })
   })
 </script>

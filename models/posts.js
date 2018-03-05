@@ -70,8 +70,9 @@ module.exports = {
   },
 
   // (指定字段的)按创建时间降序获取指定页用户文章或者特定用户的指定页文章
-  getPosts: function getPosts (author, page, type, key) {
+  getPosts: function getPosts (author, page, type, key, sort) {
     const query = {};
+    var Sort = sort==='pv'?{pv:-1}:{_id:-1};
     if(author){
       query.author = author;
     }
@@ -87,7 +88,7 @@ module.exports = {
     return Post
       .find(query)
       .populate({ path: 'author',model: 'User' })
-      .sort({ _id: -1 })
+      .sort(Sort)
       .skip(start)
       .limit(5)
       .addCreatedAt()

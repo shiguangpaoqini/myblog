@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const favicon = require('serve-favicon');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
@@ -13,6 +14,9 @@ const app = express();
 // 设置模版目录，模版引擎
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+// 设置 favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
