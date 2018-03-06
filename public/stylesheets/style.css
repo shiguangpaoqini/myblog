@@ -101,3 +101,23 @@ a:hover {
 #editor input{
   padding: 0;
 }
+
+/* ------------ ScrollUp ---------------- */
+#scrollUp{
+  position: fixed;
+  z-index: 999;
+  cursor: pointer;
+  right: 20px;
+  bottom: 20px;
+  display: none;
+}
+
+#scrollUp:hover{
+  right: 22px;
+  bottom: 22px;
+
+}
+
+#scrollUp i{
+  margin-top: 10px;
+}

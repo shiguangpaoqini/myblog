@@ -26,7 +26,6 @@ router.post('/edit',checkLogin,function(req,res,next){
   const gender = req.fields.gender;
   const bio = req.fields.bio;
   const id = req.session.user._id;
-
   try{
     if (['m','f','x'].indexOf(gender) === -1) {
       throw new Error('性别只能是m,f或x');
@@ -43,8 +42,8 @@ router.post('/edit',checkLogin,function(req,res,next){
   UserModel.updateById(id,gender,bio)
     .then(function (result){
       //将用户信息存入 session
-      console.log(result);
-      req.session.user = result.value;
+      req.session.user.gender = gender;
+      req.session.user.bio = bio;
       // 写入 flash
       req.flash('success','更改成功');
       // 跳转到首页
