@@ -1,6 +1,6 @@
 {
-  "name": "览余",
-  "description":"A glance a world",
+  "name": "myblog",
+  "description": "A glance a world",
   "version": "0.0.0",
   "private": true,
   "scripts": {
