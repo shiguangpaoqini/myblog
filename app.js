@@ -8,7 +8,6 @@ const config = require('config-lite')(__dirname);
 const routes = require('./routes');
 const pkg = require('./package');
 const formidable = require('express-formidable');
-
 const app = express();
 
 // 设置模版目录，模版引擎

@@ -3,6 +3,7 @@ const router = express.Router();
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
 const CommentModel = require('../models/comments');
+const fs = require('fs');
 const path = require('path');
 
 router.get('/',function (req, res, next) {
@@ -181,7 +182,18 @@ router.get('/:postId/remove',function(req, res, next){
 });
 
 router.post('/uploadImg',function (req, res, next) {
-    fliename = req.files.img.path.split(path.sep).pop();
+    filename = req.files.img.path.split(path.sep).pop();
+    var date = new Date();
+    var dir = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+    fs.mkdir('public/images/'+dir,function(err){
+      if(err){
+        console.log("已经存在该文件夹");
+      }else{
+        console.log("创建完成");
+      }
+      fs.rename('public/images/'+filename,'public/images/'+dir+'/'+filename)
+    });
+
     res.json(
       {
         // errno 即错误代码，0 表示没有错误。
@@ -190,7 +202,7 @@ router.post('/uploadImg',function (req, res, next) {
 
         // data 是一个数组，返回若干图片的线上地址
         data: [
-          '/images/'+fliename
+          '/images/'+dir+'/'+filename
         ]
       }
     )
