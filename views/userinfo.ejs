@@ -3,8 +3,15 @@
 <div class="ui grid">
   <div class="four wide column"></div>
   <div class="eight wide column">
-    <div class="ui card centered">
+    <div class="ui special card centered">
       <div class="blurring dimmable image">
+        <div class="ui dimmer">
+          <div class="content">
+            <div class="center">
+              <div class="ui inverted button" id="editAvatar">修改头像</div>
+            </div>
+          </div>
+        </div>
         <img src="/images/<%= user.avatar %>">
       </div>
       <div class="content">
@@ -13,11 +20,61 @@
           <span class="group"><%= ({m: '男', f: '女', x: '保密'})[user.gender] %></span>
           <pre class="group"><%= user.bio %></pre>
         </div>
-        <a href="/userinfo/edit"><button class="positive ui button right floated">修改资料</button></a>
+        <a href="/userinfo/edit">
+          <button class="positive ui button right floated">修改资料</button>
+        </a>
       </div>
     </div>
+    <div class="ui modal tiny">
+      <i class="close icon"></i>
+      <div class="header">
+        修改头像
+      </div>
+      <div class="image content">
+        <div class="ui medium image" id="preview">
+          <img style="width: 180px; height: 180px" src="/images/<%= user.avatar %>">
+        </div>
+        <form method="post" enctype="multipart/form-data" id="avatar">
+          <div class="description">
+            <label for="inputFile" class="ui button">
+              <span>上传头像</span>
+            </label>
+            <input type="file" onchange="preview(this)" name="avatar" id="inputFile" style="display: none">
+          </div>
+        </form>
+      </div>
+      <div class="actions">
+        <div class="ui black deny button">
+          取消
+        </div>
+        <input class="ui positive right button" type="submit" form="avatar" value="确认">
+      </div>
 
+    </div>
   </div>
 </div>
 
+<script>
+
+  $('.special.card .image').dimmer({
+    on: 'hover'
+  });
+
+  $('#editAvatar').click(function () {
+    $('.ui.modal').modal('show')
+  })
+
+  function preview(file) {
+    var prevDiv = document.getElementById('preview');
+    if (file.files && file.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (evt) {
+        prevDiv.innerHTML = '<img style="width: 180px; height: 180px" src="' + evt.target.result + '" />';
+      }
+      reader.readAsDataURL(file.files[0]);
+    } else {
+      prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'"></div>';
+    }
+  }
+</script>
 <%- include('footer') %>

@@ -1,9 +1,9 @@
 module.exports = {
-  port: 6000,
+  port: 6001,
   session: {
     secret: 'myblog',
     key: 'myblog',
     maxAge: 2592000000
   },
-  mongodb: 'mongodb://huoys:453822@localhost:27017/huoys_db'
+  mongodb: 'mongodb://localhost:27017/myblog'
 }

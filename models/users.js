@@ -15,9 +15,9 @@ module.exports = {
   },
 
   // 通过用户 id 更新用户信息
-  updateById: function updateById (id,gender,bio) {
+  updateById: function updateById (id,info) {
     return User
-      .updateOne({ _id: id },{$set:{bio:bio,gender:gender}})
+      .updateOne({ _id: id },{$set:info})
       .exec()
   },
 
