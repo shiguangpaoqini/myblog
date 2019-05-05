@@ -18,7 +18,7 @@
             <span>浏览(<%= post.pv || 0 %>)</span>
             <span>留言(<%= post.commentsCount || 0 %>)</span>
 
-            <% if (user && post.author._id && user._id.toString() === post.author._id.toString()) { %>
+            <% if (user && user.isAdmin || user && post.author._id && user._id.toString() === post.author._id.toString()) { %>
               <div class="ui inline dropdown">
                 <div class="text"></div>
                 <i class="dropdown icon"></i>

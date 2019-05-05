@@ -33,6 +33,11 @@ module.exports = {
     return Comment.deleteMany({ postId: postId }).exec()
   },
 
+  // 通过文章 id 删除文章下所有留言
+  delCommentsByUserId: function delCommentsByUserId (userId) {
+    return Comment.deleteMany({ author: userId }).exec()
+  },
+
   // 通过文章 id 获取该文章下所有留言，按留言创建时间升序
   getComments: function getComments (postId) {
     return Comment
@@ -47,5 +52,13 @@ module.exports = {
   // 通过文章 id 获取该文章下的留言数
   getCommentsCount: function getCommentsCount (postId) {
     return Comment.count({ postId: postId }).exec()
-  }
+  },
+
+  // 获取所有评论信息
+  getAllComments: function getAllComments () {
+    return Comment
+      .find()
+      .populate({ path: 'author',model: 'User' })
+      .exec()
+  },
 };

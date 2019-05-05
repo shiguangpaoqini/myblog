@@ -1,4 +1,5 @@
 const User = require('../lib/mongo').User;
+const PostsModel = require('./posts');
 
 module.exports = {
   // 注册一个用户
@@ -26,5 +27,25 @@ module.exports = {
     return User
       .findOneAndUpdate({ name: name },{$set:{password:newpassword}})
       .exec()
-  }
+  },
+
+  // 查看所有用户
+  getUsers: function getUsers () {
+    return User
+      .find()
+      .addCreatedAt()
+      .exec()
+  },
+
+    // 删除用户
+  removeUserById: function removeUserById (userId) {
+    return User
+      .deleteOne({_id: userId})
+      .exec()
+      .then(function (res) {
+        if (res.result.ok && res.result.n > 0) {
+          return PostsModel.delPostsByUserId(userId)
+        }
+      })
+  },
 };

@@ -103,13 +103,14 @@ router.get('/:postId',function(req, res, next){
 router.get('/:postId/edit',checkLogin,function(req, res, next){
   const postId = req.params.postId;
   const author = req.session.user._id;
-
+  const isAdmin = req.session.user.isAdmin;
+  
   PostModel.getRawPostById(postId)
     .then(function (post) {
       if(!post) {
         throw new Error('该文章不存在')
       }
-      if(author.toString() !== post.author._id.toString()) {
+      if(!isAdmin && author.toString() !== post.author._id.toString()) {
         throw new Error('权限不足')
       }
       res.render('edit',{
@@ -125,6 +126,7 @@ router.post('/:postId/edit',function(req, res, next){
   const title = req.fields.title;
   const type = req.fields.type;
   const content = req.fields.content;
+  const isAdmin = req.session.user.isAdmin;
 
   // 校验参数
   try {
@@ -147,7 +149,7 @@ router.post('/:postId/edit',function(req, res, next){
       if(!post){
         throw new Error('文章不存在')
       }
-      if(author.toString() !== post.author._id.toString()){
+      if(!isAdmin && author.toString() !== post.author._id.toString()){
         throw new Error('没有权限')
       }
       PostModel.updatePostById(postId,{ title: title, type: type, content: content })
@@ -161,17 +163,21 @@ router.post('/:postId/edit',function(req, res, next){
 
 router.get('/:postId/remove',function(req, res, next){
   const postId = req.params.postId;
-  const author = req.session.user._id;
+  let author = req.session.user._id;
+  const isAdmin = req.session.user.isAdmin;
 
   PostModel.getRawPostById(postId)
     .then(function (post) {
+      if(isAdmin) {
+        author = ''
+      }
       if(!post) {
         throw new Error('该文章不存在')
       }
-      if(author.toString() !== post.author._id.toString()) {
+      if(!isAdmin && author.toString() !== post.author._id.toString()) {
         throw new Error('权限不足')
       }
-      PostModel.delPostById(postId,author)
+      PostModel.delPostById(postId, author)
         .then(function () {
           req.flash('success','删除文章成功');
           // 删除成功后跳转到主页

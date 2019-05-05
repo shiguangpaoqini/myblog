@@ -72,6 +72,7 @@ module.exports = {
   // (指定字段的)按创建时间降序获取指定页用户文章或者特定用户的指定页文章
   getPosts: function getPosts (author, page, type, key, sort) {
     const query = {};
+    var start = 0;
     var Sort = sort==='pv'?{pv:-1}:{_id:-1};
     if(author){
       query.author = author;
@@ -83,14 +84,14 @@ module.exports = {
       query.title = {$regex:new RegExp(key)};
     }
     if(page) {
-      var start = (page - 1) * 5;
+      start = (page - 1) * 5;
     }
     return Post
       .find(query)
       .populate({ path: 'author',model: 'User' })
       .sort(Sort)
       .skip(start)
-      .limit(5)
+      // .limit(5)
       .addCreatedAt()
       .addCommentsCount()
       .contentToHtml()
@@ -119,7 +120,14 @@ module.exports = {
 
   // 通过文章 id 删除一篇文章
   delPostById: function delPostById (postId, author) {
-    return Post.deleteOne({ author: author, _id: postId })
+    const query = {}
+    if(postId){
+      query._id = postId
+    }
+    if(author){
+      query.author = author
+    }
+    return Post.deleteOne(query)
       .exec()
       .then(function (res) {
         //文章删除后，再删除文章下留言
@@ -127,5 +135,15 @@ module.exports = {
           return CommentModel.delCommentsByPostId(postId)
         }
       })
+  },
+
+  delPostsByUserId: function delPostsByUserId(userId) {
+    Post.deleteMany({author: userId})
+    .exec()
+    .then(function (res){
+      if (res.result.ok && res.result.n > 0) {
+        return CommentModel.delCommentsByUserId(userId)
+      }
+    })
   }
 };

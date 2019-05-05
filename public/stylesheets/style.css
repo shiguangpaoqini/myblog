@@ -17,11 +17,23 @@ a:hover {
   color: #fff !important;
 }
 
+.button.danger{
+  background-color: #c04f4f !important;
+  color: #fff !important;
+}
+
 .avatar {
   border-radius: 3px;
   width: 48px;
   height: 48px;
   float: right;
+}
+
+.avatar.circle{
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  float: none;
 }
 
 /* ---------- nav ---------- */
