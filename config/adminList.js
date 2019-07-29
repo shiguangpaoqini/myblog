@@ -1,3 +1,3 @@
 module.exports = [
-  '汤姆'
+  'admin'
 ]
